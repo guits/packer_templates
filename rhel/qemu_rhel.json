@@ -1,0 +1,43 @@
+{
+  "variables": {
+      "user": "lab",
+      "password": "lab",
+      "disk_size": "10000",
+      "name": "rhel-7.3-x86_64"
+  },
+  "builders":
+  [
+    {
+      "name": "{{ user `name`}}",
+      "type": "qemu",
+      "iso_url": "./rhel-server-7.3-x86_64-dvd.iso",
+      "iso_checksum": "120acbca7b3d55465eb9f8ef53ad7365f2997d42d4f83d7cc285bf5c71e1131f",
+      "iso_checksum_type": "sha256",
+      "output_directory": "output_{{ user `name` }}",
+      "shutdown_command": "shutdown -P now",
+      "disk_size": "{{ user `disk_size`}}",
+      "format": "qcow2",
+      "headless": false,
+      "accelerator": "kvm",
+      "http_directory": "httpdir",
+      "http_port_min": 10082,
+      "http_port_max": 10089,
+      "ssh_host_port_min": 2222,
+      "ssh_host_port_max": 2229,
+      "ssh_username": "root",
+      "ssh_password": "root",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "15m",
+      "vm_name": "{{ user `name` }}.qcow2",
+      "net_device": "virtio-net",
+      "disk_interface": "virtio",
+      "boot_wait": "0s",
+      "boot_command":
+      [
+        "<esc>",
+        "linux inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/anaconda-ks.cfg",
+        "<enter>"
+      ]
+    }
+  ]
+}
